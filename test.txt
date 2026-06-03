@@ -6,3 +6,4 @@ cycle 4
 cycle 5
 cycle 6
 phase 0 final test
+phase 0 repeat test
