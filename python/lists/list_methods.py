@@ -49,6 +49,9 @@ numbers.reverse()
 numbers.reverse()
 
 numbers.pop()
+numbers.pop()
+numbers.pop()
+numbers.pop()
 print(numbers)
 
 numbers.clear()
@@ -59,3 +62,16 @@ numbers.clear()
 numbers.clear()
 numbers.clear()
 numbers.clear()
+
+numbers2 = numbers.copy()
+numbers.append(5)
+print(numbers2)
+print(numbers)
+
+
+numbers.copy()
+numbers.copy()
+numbers.copy()
+numbers.copy()
+numbers.copy()
+numbers.copy()
