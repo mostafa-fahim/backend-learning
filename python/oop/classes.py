@@ -59,3 +59,11 @@ roger.subject = "Physics"
 point2.x = 22
 
 print(max.subject, alex.group, roger.subject)
+
+class Student:
+    def info(self, roll, gpa):
+        print(f"My roll is {roll} and my gpa is {gpa}")
+
+
+karim = Student()
+karim.info()
