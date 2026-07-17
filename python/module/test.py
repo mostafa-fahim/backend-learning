@@ -19,3 +19,10 @@ from number_finder import find_max
 
 numbers = [2, 3, 7, 5, 6, 8, 5]
 print(find_max(numbers))
+
+import ecommerce.shipping
+ecommerce.shipping.calc_shipping()
+from ecommerce import shipping
+shipping.calc_shipping()
+from ecommerce.shipping import calc_shipping
+calc_shipping()
