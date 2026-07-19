@@ -1,0 +1,4 @@
+invalid literal for int() with base 10: 'asdf'
+invalid literal for int() with base 10: 'jkl;'
+invalid literal for int() with base 10: 'jflkjafldjl'
+invalid literal for int() with base 10: 'fdasdfda'
