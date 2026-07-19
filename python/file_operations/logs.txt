@@ -1,0 +1,4 @@
+INFO: Started
+ERROR: Failed
+INFO: Finished
+ERROR: Crashed
