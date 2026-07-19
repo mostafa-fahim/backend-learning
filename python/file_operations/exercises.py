@@ -1,67 +1,88 @@
-# #exercise-1
-# with open("file2.txt", "w") as f:
-#     f.write("\nLine1\nLine2\nLine3")
+# # #exercise-1
+# # with open("file2.txt", "w") as f:
+# #     f.write("\nLine1\nLine2\nLine3")
 
 
-# with open("file2.txt", "r") as f:
-#     content = f.read()
-#     print(content)
+# # with open("file2.txt", "r") as f:
+# #     content = f.read()
+# #     print(content)
 
 
-# content = content.replace("Line2", "Replaced line")
+# # content = content.replace("Line2", "Replaced line")
 
 
-# with open("file2_modified.txt", "w") as f:
-#     f.write(content)
+# # with open("file2_modified.txt", "w") as f:
+# #     f.write(content)
 
 
-# with open("file2_modified.txt", "r") as f:
-#     print(f.read())
+# # with open("file2_modified.txt", "r") as f:
+# #     print(f.read())
 
 
-# with open("file2_modified.txt", "r") as f:
-#     content = f.read()
+# # with open("file2_modified.txt", "r") as f:
+# #     content = f.read()
 
 
-# content = content.replace("Line1", "First").replace("Line3", "Third")
+# # content = content.replace("Line1", "First").replace("Line3", "Third")
 
 
-# with open("file2_final.txt", "w") as f:
-#     f.write(content)
+# # with open("file2_final.txt", "w") as f:
+# #     f.write(content)
 
 
-# with open("file2_final.txt", "r") as f:
-#     print(f.read())
+# # with open("file2_final.txt", "r") as f:
+# #     print(f.read())
 
 
-# #exercie-2
-# with open("fruits.txt", "w") as f:
-#     f.write("apple\nbanan\norange")
+# # #exercie-2
+# # with open("fruits.txt", "w") as f:
+# #     f.write("apple\nbanan\norange")
 
 
-# count = 0
-# with open("fruits.txt", "r") as f:
-#     for line in f:
-#         count += 1
-#         print(line.strip())
+# # count = 0
+# # with open("fruits.txt", "r") as f:
+# #     for line in f:
+# #         count += 1
+# #         print(line.strip())
     
-# print(f"Total line: {count}")
+# # print(f"Total line: {count}")
 
 
-# #exercise-3
-# with open("logs.txt", "w") as f:
-#     f.write("INFO: Started\nERROR: Failed\nINFO: Finished\nERROR: Crashed")
+# # #exercise-3
+# # with open("logs.txt", "w") as f:
+# #     f.write("INFO: Started\nERROR: Failed\nINFO: Finished\nERROR: Crashed")
 
 
-# with open("logs.txt", "r") as f:
-#     for line in f:
-#         if "ERROR" in line:
-#             print(line.strip())
+# # with open("logs.txt", "r") as f:
+# #     for line in f:
+# #         if "ERROR" in line:
+# #             print(line.strip())
 
 
-#exercise-4
-try:
-    numbers = int(input("Numbers: "))
-except Exception as e:
-    with open("errors.txt", "a") as error_logs:
-        error_logs.write(str(e) + "\n")
+# #exercise-4
+# try:
+#     numbers = int(input("Numbers: "))
+# except Exception as e:
+#     with open("errors.txt", "a") as error_logs:
+#         error_logs.write(str(e) + "\n")
+
+
+#exercise-5
+from pathlib import Path
+
+folder = Path(".")
+
+with open("summary.txt", "w") as f:
+    for file in folder.iterdir():
+        if file.suffix == ".txt" and file.name != "summary.txt":
+            f.write(file.name + "\n")
+
+#exercise-5(other way)
+from pathlib import Path
+
+folder = Path(".")
+
+with open("summary2.txt", "w") as f:
+    for file in folder.glob("*.txt"):
+        if file.name != "summary2.txt":
+            f.write(file.name + "\n")
