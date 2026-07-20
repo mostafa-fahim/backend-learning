@@ -11,36 +11,35 @@ while True:
     try:
         choice = int(input("Choice: "))
 
+        if choice == 5:
+            print("Have a good day!")
+            break
+
+        if choice not in (1, 2, 3, 4):
+            print("invalid choice, choose 1, 2, 3 or 4")
+            continue
+
+        first = float(input("First number: "))
+        second = float(input("Second number: "))
+
         if choice == 1:
-            first = float(input("First number: "))
-            second = float(input("Second number: "))
             result = first + second
             print(f"Result: {result}")
         
         elif choice == 2:
-            first = float(input("First number: "))
-            second = float(input("Second number: "))
             result = first - second
             print(f"Result: {result}")
             
         elif choice == 3:
-            first = float(input("First number: "))
-            second = float(input("Second number: "))
             result = first * second
             print(f"Result: {result}")
 
         elif choice == 4:
             try:
-                first = float(input("First number: "))
-                second = float(input("Second number: "))
                 result = first / second
                 print(f"Result: {result}")
             except ZeroDivisionError:
                 print("Cannot divide by zero!")
-
-        elif choice == 5:
-            print("Have a good day!")
-            break
 
         else:
             print("Invalid input!\nChoose a valid number.")
