@@ -28,16 +28,12 @@ while True:
                 print("registered!")
         
         elif choice == 2:
-            try:
                 with open("user_log.txt", "r") as f:
-                    lines = f.readlines()
-                    for line in lines:
-                        if user_name and password not in line:
-                            print("register first!")
-                            continue
-                    else:
-                        print("logged in successfully")
-            except FileNotFoundError:
-                print("register first please")
+                    content = f.read()
+                    print(content)
+                if user_name in content and password in content:
+                    print("logged in successfully")
+                else:
+                    print("register first please")
     except ValueError:
         print("Please choose a valid input!")
