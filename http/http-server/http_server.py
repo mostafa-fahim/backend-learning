@@ -1,8 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-
+from urllib.parse import urlparse, parse_qs
 
 class MyHandler(BaseHTTPRequestHandler):
-
     def send_text(self, status_code, content_type, message):
         self.send_response(status_code)
         self.send_header("Content-Type", content_type)
@@ -10,15 +9,29 @@ class MyHandler(BaseHTTPRequestHandler):
         self.wfile.write(message)
 
     def do_GET(self):
-        if self.path == "/":
-            self.send_text(200, "text/plain", b"Home Page")
+        parsed_url = urlparse(self.path)
+        path = parsed_url.path
+        query_params = parse_qs(parsed_url.query)
 
-        elif self.path == "/users":
-            self.send_text(200, "application/json", b'[{"name": "Karim", "age": 22}, {"name": "Ahmed", "age": 21}]')
+        if path == "/":
+            self.send_text(200, "text/plain", b"Home Page")
+        elif path == "/users":
+            page = query_params.get("page")
+
+            if page is None:
+                number = 1
+            else:
+                number = int(page[0])
+
+            if number == 1:
+                self.send_text(200, "application/json", b'[{"name": "Karim", "age": 21}, {"name": "Ahmed", "age": 22}]')
+            elif number == 2:
+                self.send_text(200, "application/json", b'[{"name": "Rahim", "age": 26}, {"name": "Sakib", "age": 29}]')
+            else:
+                self.send_text(404, "text/plain", b"Page Not Found")
 
         else:
             self.send_text(404, "text/plain", b"Page Not Found")
-
 
 server = HTTPServer(("localhost", 8000), MyHandler)
 
