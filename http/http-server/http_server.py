@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
+
 class MyHandler(BaseHTTPRequestHandler):
     def send_text(self, status_code, content_type, message):
         self.send_response(status_code)
@@ -15,9 +16,9 @@ class MyHandler(BaseHTTPRequestHandler):
 
         if path == "/":
             self.send_text(200, "text/plain", b"Home Page")
+
         elif path == "/users":
             page = query_params.get("page")
-
             if page is None:
                 number = 1
             else:
@@ -30,8 +31,27 @@ class MyHandler(BaseHTTPRequestHandler):
             else:
                 self.send_text(404, "text/plain", b"Page Not Found")
 
+        elif path.startswith("/users/"):
+            parts = self.path.split("/")
+            user_id = parts[2]
+            if user_id == 1:
+                self.send_text(200, "application/json", b'{"name": "Karim", "age": 21}')
+            elif user_id == 2:
+                self.send_text(200, "application/json", b'{"name": "Ahmed", "age": 22}')
+            else:
+                self.send_text(404, "text/plain", b"User Not Found")
+
         else:
             self.send_text(404, "text/plain", b"Page Not Found")
+
+
+    def do_POST(self):
+        content_length = int(self.headers["Content-Length"])
+        body = self.rfile.read(content_length)
+
+        print(body)
+
+        self.send_text(200, "text/plain", b"POST received")
 
 server = HTTPServer(("localhost", 8000), MyHandler)
 
