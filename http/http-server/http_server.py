@@ -74,6 +74,8 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_text(400, "text/plain", b"Age must be an int")
             return
 
+        data["id"] = len(users) + 1
+
         users.append(data)
 
         response = json.dumps(data).encode()
