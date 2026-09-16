@@ -1,6 +1,6 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
 import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qs, urlparse
 
 users = []
 
@@ -26,7 +26,11 @@ class MyHandler(BaseHTTPRequestHandler):
             if page is None:
                 number = 1
             else:
-                number = int(page[0])
+                try:
+                    number = int(page[0])
+                except ValueError:
+                    self.send_text(400, "text/plain", b"Page must be an int")
+                    return
 
             if number == 1:
                 self.send_text(200, "application/json", b'[{"name": "Karim", "age": 21}, {"name": "Ahmed", "age": 22}]')
@@ -72,9 +76,9 @@ class MyHandler(BaseHTTPRequestHandler):
 
         users.append(data)
 
-        print(users)
+        response = json.dumps(data).encode()
 
-        self.send_text(201, "text/plain", b"POST received")
+        self.send_text(201, "application/json", response)
 
 
 server = HTTPServer(("localhost", 8000), MyHandler)
