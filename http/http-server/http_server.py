@@ -2,7 +2,10 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
 
-users = []
+users = [
+    {"id": 1, "name": "Karim", "age": 21},
+    {"id": 2, "name": "Ahmed", "age": 22},
+]
 
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -41,12 +44,12 @@ class MyHandler(BaseHTTPRequestHandler):
 
         elif path.startswith("/users/"):
             parts = path.split("/")
-            user_id = parts[2]
+            user_id = int(parts[2])
 
-            if user_id == "1":
-                self.send_text(200, "application/json", b'{"name": "Karim", "age": 21}')
-            elif user_id == "2":
-                self.send_text(200, "application/json", b'{"name": "Ahmed", "age": 22}')
+            for user in users:
+                if user["id"] == user_id:
+                    response = json.dumps(user).encode()
+                    self.send_text(200, "application/json", response)
             else:
                 self.send_text(404, "text/plain", b"User Not Found")
 
