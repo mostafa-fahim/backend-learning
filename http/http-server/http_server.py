@@ -50,7 +50,12 @@ class MyHandler(BaseHTTPRequestHandler):
 
         elif path.startswith("/users/"):
             parts = path.split("/")
-            user_id = int(parts[2])
+
+            try:
+                user_id = int(parts[2])
+            except ValueError:
+                self.send_text(400, "text/plain", b"User ID must be an int")
+                return
 
             for user in users:
                 if user["id"] == user_id:
@@ -96,7 +101,13 @@ class MyHandler(BaseHTTPRequestHandler):
 
         if path.startswith("/users/"):
             parts = path.split("/")
-            user_id = int(parts[2])
+
+            try:
+                user_id = int(parts[2])
+            except ValueError:
+                self.send_text(400, "text/plain", b"User ID must be an int")
+                return
+            
             for user in users:
                 if user["id"] == user_id:
                     content_length = int(self.headers["Content-Length"])
@@ -124,7 +135,7 @@ class MyHandler(BaseHTTPRequestHandler):
                     user["age"] = data["age"]
 
                     response = json.dumps(user).encode()
-                    self.send_text(200, "application", response)
+                    self.send_text(200, "application/json", response)
                     return
             else:
                 self.send_text(404, "text/plain", b"User Not Found")         
