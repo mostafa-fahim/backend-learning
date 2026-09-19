@@ -80,18 +80,55 @@ class MyHandler(BaseHTTPRequestHandler):
         if not isinstance(data["name"], str):
             self.send_text(400, "text/plain", b"Name must be a str")
             return
+        
         if not isinstance(data["age"], int):
             self.send_text(400, "text/plain", b"Age must be an int")
             return
 
         data["id"] = len(users) + 1
-
         users.append(data)
 
         response = json.dumps(data).encode()
-
         self.send_text(201, "application/json", response)
 
+    def do_PUT(self):
+        path = self.path
+
+        if path.startswith("/users/"):
+            parts = path.split("/")
+            user_id = int(parts[2])
+            for user in users:
+                if user["id"] == user_id:
+                    content_length = int(self.headers["Content-Length"])
+                    body = self.rfile.read(content_length)
+
+                    try:
+                        data = json.loads(body)
+                    except json.JSONDecodeError:
+                        self.send_text(400, "text/plain", b"Invalid JSON")
+                        return
+
+                    if "name" not in data or "age" not in data:
+                        self.send_text(400, "text/plain", b"Missing required fields")
+                        return
+
+                    if not isinstance(data["name"], str):
+                        self.send_text(400, "text/plain", b"Name must be a str")
+                        return
+
+                    if not isinstance(data["age"], int):
+                        self.send_text(400, "text/plain", b"Age must be an int")
+                        return
+
+                    user["name"] = data["name"]
+                    user["age"] = data["age"]
+
+                    response = json.dumps(user).encode()
+                    self.send_text(200, "application", response)
+                    return
+            else:
+                self.send_text(404, "text/plain", b"User Not Found")         
+                    
 
 server = HTTPServer(("localhost", 8000), MyHandler)
 
