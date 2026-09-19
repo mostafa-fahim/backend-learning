@@ -5,6 +5,8 @@ from urllib.parse import parse_qs, urlparse
 users = [
     {"id": 1, "name": "Karim", "age": 21},
     {"id": 2, "name": "Ahmed", "age": 22},
+    {"id": 3, "name": "Rahim", "age": 26},
+    {"id": 4, "name": "Sakib", "age": 29},
 ]
 
 
@@ -25,7 +27,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
         elif path == "/users":
             page = query_params.get("page")
-            
+
             if page is None:
                 number = 1
             else:
@@ -35,12 +37,16 @@ class MyHandler(BaseHTTPRequestHandler):
                     self.send_text(400, "text/plain", b"Page must be an int")
                     return
 
-            if number == 1:
-                self.send_text(200, "application/json", b'[{"name": "Karim", "age": 21}, {"name": "Ahmed", "age": 22}]')
-            elif number == 2:
-                self.send_text(200, "application/json", b'[{"name": "Rahim", "age": 26}, {"name": "Sakib", "age": 29}]')
-            else:
+            start = (number - 1) * 2
+            end = start + 2
+            page_users = users[start:end]
+
+            if not page_users:
                 self.send_text(404, "text/plain", b"Page Not Found")
+                return
+            
+            response = json.dumps(page_users).encode()
+            self.send_text(200, "application/json", response)
 
         elif path.startswith("/users/"):
             parts = path.split("/")
@@ -50,6 +56,7 @@ class MyHandler(BaseHTTPRequestHandler):
                 if user["id"] == user_id:
                     response = json.dumps(user).encode()
                     self.send_text(200, "application/json", response)
+                    return
             else:
                 self.send_text(404, "text/plain", b"User Not Found")
 
