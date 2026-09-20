@@ -138,9 +138,59 @@ class MyHandler(BaseHTTPRequestHandler):
                     self.send_text(200, "application/json", response)
                     return
             else:
-                self.send_text(404, "text/plain", b"User Not Found")         
-                    
+                self.send_text(404, "text/plain", b"User Not Found")
+        else:
+            self.send_text(404, "text/plain", b"Page Not Found")     
 
+    def do_PATCH(self):
+        path = self.path
+
+        if path.startswith("/users/"):
+            parts = path.split("/")
+
+            try:
+                user_id = int(parts[2])
+            except ValueError:
+                self.send_text(400, "text/plain", b"User ID must be an int")
+                return
+
+            for user in users:
+                if user["id"] == user_id:
+                    content_length = int(self.headers["Content-Length"])
+                    body = self.rfile.read(content_length)
+
+                    try:
+                        data = json.loads(body)
+                    except json.JSONDecodeError:
+                        self.send_text(400, "text/plain", b"Invalid JSON")
+                        return
+
+                    if not data:
+                        self.send_text(400, "text/plain", b"No fields to update")
+                        return
+
+                    if "name" in data and not isinstance(data["name"], str):
+                        self.send_text(400, "text/plain", b"Name must be a str")
+                        return
+                    
+                    if "age" in data and not isinstance(data["age"], int):
+                        self.send_text(400, "text/plain", b"Age must be an int")
+                        return
+
+                    if "name" in data:
+                        user["name"] = data["name"]
+
+                    if "age" in data:
+                        user["age"] = data["age"]
+
+                    response = json.dumps(user).encode()
+                    self.send_text(200, "application/json", response)
+                    return
+            else:
+                self.send_text(404, "text/plain", b"User Not Found")
+        else:
+            self.send_text(404, "text/plain", b"Page Not Found")
+                
 server = HTTPServer(("localhost", 8000), MyHandler)
 
 print("My server is running on http://localhost:8000")
