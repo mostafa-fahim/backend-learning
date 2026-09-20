@@ -190,6 +190,29 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.send_text(404, "text/plain", b"User Not Found")
         else:
             self.send_text(404, "text/plain", b"Page Not Found")
+
+    def do_DELETE(self):
+        path = self.path
+
+        if path.startswith("/users/"):
+            parts = path.split("/")
+
+            try:
+                user_id = int(parts[2])
+            except ValueError:
+                self.send_text(400, "text/plain", b"User ID must be an int")
+                return
+
+            for user in users:
+                if user["id"] == user_id:
+                    users.remove(user)
+                    self.send_text(200, "text/plain", b"User Deleted")
+                    return
+            else:
+                    self.send_text(404, "text/plain", b"User Not Found")
+        else:
+            self.send_text(404, "text/plain", b"Page Not Found")
+
                 
 server = HTTPServer(("localhost", 8000), MyHandler)
 
